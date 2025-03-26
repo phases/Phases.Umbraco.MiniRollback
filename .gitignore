@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Phases.Umbraco.MiniRollback/bin/Debug
+/Phases.Umbraco.MiniRollback/buildTransitive
+/Phases.Umbraco.MiniRollback/obj
