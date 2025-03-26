@@ -50,11 +50,11 @@ Yes, the MiniRollback package is enabled by default. If you wish to disable it, 
 ## Screenshots
 
 Icons
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.NodeFilters/e20426fa56c390379aae658d21550b83d00c484b/Phases.Umbraco.NodeFilters/screenshots/filter-home.JPG)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png?token=GHSAT0AAAAAAC7XLZ37JTPDYOL4DBHUGK54Z7D5I7A)
 
 Popup Box
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.NodeFilters/main/Phases.Umbraco.NodeFilters/screenshots/filters.JPG)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png?token=GHSAT0AAAAAAC7XLZ37V775KLOIWBJLWHDGZ7D5JOQ)
 
 Select The History Content
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.NodeFilters/main/Phases.Umbraco.NodeFilters/screenshots/filter-by-created-date.JPG)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.png?token=GHSAT0AAAAAAC7XLZ36HMMNLMYLDM6BOOQYZ7D5J2Q)
 
