@@ -53,8 +53,8 @@ Icons
 ![App Screenshot](https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png?raw=true)
 
 Popup Box
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png?token=GHSAT0AAAAAAC7XLZ37V775KLOIWBJLWHDGZ7D5JOQ)
+![App Screenshot](https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png?raw=true)
 
 Select The History Content
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.png?token=GHSAT0AAAAAAC7XLZ36HMMNLMYLDM6BOOQYZ7D5J2Q)
+![App Screenshot](https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.jpg?raw=true)
 
