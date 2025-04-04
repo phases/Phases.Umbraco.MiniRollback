@@ -1,0 +1,52 @@
+{
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "AuthorDetails": {
+    "Name": "Phases",
+    "Description": "Phases - We create digital efficiency - Web, Podio, Integrations",
+    "Url": "https://www.phases.io/",
+    "ImageUrl": "",
+    "SyncContributorsFromRepository": true
+  },
+  "Category": "Editor Tools",
+  "Description": "Phases.Umbraco.MiniRollback is an Umbraco package that adds version history access directly to your content editing interface. By placing a small icon next to text fields, rich text editors, and textarea, users can instantly view previous versions of specific content fields in a simple popup without leaving the page. Making content comparison and recovery faster and easier than ever.",
+  "DocumentationUrl": "https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/README.md",
+  "LicenseTypes": [ "Free" ],
+  "IssueTrackerUrl": "https://github.com/phases/Phases.Umbraco.MiniRollback/issues",
+  "PackageType": "Package",
+  "RelatedPackages": [
+    {
+      "PackageId": "",
+      "Description": ""
+    }
+  ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png",
+      "Caption": "Icons",
+      "ImageUrl": "https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png",
+      "Caption": "Popup Box",
+      "ImageUrl": "https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.jpg",
+      "Caption": "Select The History Content"
+    }
+  ],
+  "Tags": [ "umbraco", "editor", "node", "backoffice" ],
+  "VersionSpecificPackageIds": [
+    {
+      "UmbracoMajorVersion": 10,
+      "PackageId": "Phases.Umbraco.MiniRollback"
+    },
+    {
+      "UmbracoMajorVersion": 11,
+      "PackageId": "Phases.Umbraco.MiniRollback"
+    },
+    {
+      "UmbracoMajorVersion": 12,
+      "PackageId": "Phases.Umbraco.MiniRollback"
+    },
+    {
+      "UmbracoMajorVersion": 13,
+      "PackageId": "Phases.Umbraco.MiniRollback"
+    }
+  ],
+  "VideoUrl": ""
+}
