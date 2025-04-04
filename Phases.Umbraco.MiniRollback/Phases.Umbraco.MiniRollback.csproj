@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <ContentTargetFolders>.</ContentTargetFolders>
@@ -10,12 +10,12 @@
     <PackageId>Phases.Umbraco.MiniRollback</PackageId>
     <Product>Phases.Umbraco.MiniRollback</Product>
     <Title>Phases.Umbraco.MiniRollback</Title>
-    <Description>Phases.Umbraco.MiniRollback is an Umbraco 11+ package that adds version history access directly to your content editing interface. 
+    <Description>Phases.Umbraco.MiniRollback is an Umbraco 10+ package that adds version history access directly to your content editing interface. 
 By placing a small icon next to text fields, rich text editors, and textareas, editors can instantly view previous versions of specific content fields in a simple popup without leaving the page. 
 Making content comparison and recovery faster and easier than ever.</Description>
     <PackageTags>umbraco plugin package;umbraco-marketplace;umbraco;umbraco-v10;umbraco-v11;umbraco-v12;umbraco-v13</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.5.11</Version>
+    <Version>1.0.5.10</Version>
     <Authors>midhun_roy</Authors>
     <Company>Phases</Company>
     <PackageIcon>Phases.Umbraco.MiniRollback.png</PackageIcon>
@@ -38,8 +38,8 @@ Making content comparison and recovery faster and easier than ever.</Description
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="11.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
