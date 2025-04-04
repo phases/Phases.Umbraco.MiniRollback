@@ -50,11 +50,11 @@ Yes, the MiniRollback package is enabled by default. If you wish to disable it, 
 ## Screenshots
 
 Icons
-![App Screenshot](https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png?raw=true)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png)
 
 Popup Box
-![App Screenshot](https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png?raw=true)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png)
 
 Select The History Content
-![App Screenshot](https://github.com/phases/Phases.Umbraco.MiniRollback/blob/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.jpg?raw=true)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.jpg)
 
