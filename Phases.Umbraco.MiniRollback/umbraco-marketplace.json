@@ -4,7 +4,7 @@
     "Name": "Phases",
     "Description": "Phases - We create digital efficiency - Web, Podio, Integrations",
     "Url": "https://www.phases.io/",
-    "ImageUrl": "",
+    "ImageUrl": "https://github.com/phases.png",
     "SyncContributorsFromRepository": true
   },
   "Category": "Editor Tools",
@@ -22,9 +22,13 @@
   "Screenshots": [
     {
       "ImageUrl": "https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png",
-      "Caption": "Icons",
+      "Caption": "Icons"
+    },
+    {
       "ImageUrl": "https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png",
-      "Caption": "Popup Box",
+      "Caption": "Popup Box"
+    },
+    {
       "ImageUrl": "https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.jpg",
       "Caption": "Select The History Content"
     }
