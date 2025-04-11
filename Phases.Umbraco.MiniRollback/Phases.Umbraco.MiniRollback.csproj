@@ -31,6 +31,13 @@ Making content comparison and recovery faster and easier than ever.</Description
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="12.0.0" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="12.0.0" />
   </ItemGroup>
