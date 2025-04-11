@@ -15,7 +15,7 @@ By placing a small icon next to text fields, rich text editors, and textareas, e
 Making content comparison and recovery faster and easier than ever.</Description>
     <PackageTags>umbraco plugin package;umbraco-marketplace;umbraco;umbraco-v10;umbraco-v11;umbraco-v12;umbraco-v13</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.5.13</Version>
+    <Version>1.0.6.13</Version>
     <Authors>midhun_roy</Authors>
     <Company>Phases</Company>
     <PackageIcon>Phases-Umbraco-MiniRollback.png</PackageIcon>
