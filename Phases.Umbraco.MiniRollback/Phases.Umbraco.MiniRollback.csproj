@@ -18,7 +18,7 @@ Making content comparison and recovery faster and easier than ever.</Description
     <Version>1.0.5.12</Version>
     <Authors>midhun_roy</Authors>
     <Company>Phases</Company>
-    <PackageIcon>Phases.Umbraco.MiniRollback.png</PackageIcon>
+    <PackageIcon>Phases-Umbraco-MiniRollback.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/phases/Phases.Umbraco.MiniRollback/tree/main/Phases.Umbraco.MiniRollback</PackageProjectUrl>
     <RepositoryUrl>https://github.com/phases/Phases.Umbraco.MiniRollback/tree/main/Phases.Umbraco.MiniRollback</RepositoryUrl>
@@ -40,7 +40,7 @@ Making content comparison and recovery faster and easier than ever.</Description
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Update="Phases.Umbraco.MiniRollback.png">
+    <None Update="Phases-Umbraco-MiniRollback.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
