@@ -24,11 +24,11 @@ After installing this package, a small icon appears next to text fields, rich te
 
 #### How can I access the history?
 
-By clicking the small icon next to text fields, rich text editors, and textarea, users can instantly view previous versions of specific content fields in a simple popup (see Screenshot 2).
+By clicking the small icon next to text fields, rich text editors, and textarea, users can instantly view previous versions of specific content fields in a simple popup (see Screenshot 2 & 3).
 
 #### How can I revert to a previous version of the content?
 
-After clicking the icon, a simple popup box will display the previous history data. You can select a history entry from the list in the popup box, and the selected data will be set in the related text field, rich text editor, or text area (see Screenshot 3).
+After clicking the icon, a simple popup box will display the previous history data. You can select a history entry from the list in the popup box, and the selected data will be set in the related text field, rich text editor, or text area (see Screenshot 4).
 
 #### Is it possible to temporarily disable the MiniRollback functionality?
 
@@ -50,11 +50,12 @@ Yes, the MiniRollback package is enabled by default. If you wish to disable it, 
 ## Screenshots
 
 Icons
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/rollback-icon.png)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/mini-rollback-icons.PNG)
 
 Popup Box
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/view-history.png)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/mini-rollback-history-compare.PNG)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/mini-rollback-history-normal.PNG)
 
 Select The History Content
-![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/revert-the-history.jpg)
+![App Screenshot](https://raw.githubusercontent.com/phases/Phases.Umbraco.MiniRollback/refs/heads/main/Phases.Umbraco.MiniRollback/screenshots/mini-rollback-history-revert.PNG)
 
