@@ -23,10 +23,9 @@ Delete the following folder from your project:
 
 ## Step 4: Clear Umbraco Cache
 
-Delete these folders:
+Delete these folder:
 ```
 /umbraco/Data/TEMP/
-/umbraco/Data/DistCache/
 ```
 
 ## Step 5: Restart the Application
