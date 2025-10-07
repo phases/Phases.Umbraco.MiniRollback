@@ -1,0 +1,24 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- Fixed path to point to contentFiles in the NuGet package -->
+		<PhasesUmbracoMiniRollbackContentFilesPath>$(MSBuildThisFileDirectory)..\contentFiles\any\any\App_Plugins\Phases.Umbraco.MiniRollback\**\*.*</PhasesUmbracoMiniRollbackContentFilesPath>
+	</PropertyGroup>
+
+	<Target Name="CopyPhasesUmbracoMiniRollbackAssets" BeforeTargets="BeforeBuild">
+		<ItemGroup>
+			<PhasesUmbracoMiniRollbackContentFiles Include="$(PhasesUmbracoMiniRollbackContentFilesPath)" />
+		</ItemGroup>
+		<Message Text="Copying Phases.Umbraco.MiniRollback files from: $(PhasesUmbracoMiniRollbackContentFilesPath) - #@(PhasesUmbracoMiniRollbackContentFiles->Count()) files" Importance="high" />
+		<Copy SourceFiles="@(PhasesUmbracoMiniRollbackContentFiles)"
+			  DestinationFiles="@(PhasesUmbracoMiniRollbackContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Phases.Umbraco.MiniRollback\%(RecursiveDir)%(Filename)%(Extension)')"
+			  SkipUnchangedFiles="true" />
+	</Target>
+
+	<Target Name="ClearPhasesUmbracoMiniRollbackAssets" BeforeTargets="Clean">
+		<ItemGroup>
+			<PhasesUmbracoMiniRollbackDir Include="$(MSBuildProjectDirectory)\App_Plugins\Phases.Umbraco.MiniRollback\" />
+		</ItemGroup>
+		<Message Text="Clearing old Phases.Umbraco.MiniRollback data" Importance="high" />
+		<RemoveDir Directories="@(PhasesUmbracoMiniRollbackDir)" />
+	</Target>
+</Project>
