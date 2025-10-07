@@ -15,7 +15,7 @@ namespace Phases.Umbraco.MiniRollback.Composers
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            builder.Services.AddSingleton<IMiniRollbackServices, MiniRollbackServices>();
+            builder.Services.AddTransient<IMiniRollbackServices, MiniRollbackServices>();
         }
     }
 }

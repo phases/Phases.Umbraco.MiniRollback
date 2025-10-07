@@ -1,5 +1,17 @@
-angular.module("umbraco").config(function ($provide) {
-    $provide.decorator("umbPropertyEditorDirective", function ($delegate, $http, $compile) {
+// Dynamically load CSS file - ensures it loads even when Debug: false
+(function () {
+    if (!document.getElementById('miniRollbackStyles')) {
+        var cssLink = document.createElement('link');
+        cssLink.id = 'miniRollbackStyles';
+        cssLink.rel = 'stylesheet';
+        cssLink.type = 'text/css';
+        cssLink.href = '/App_Plugins/Phases.Umbraco.MiniRollback/css/style.minirollback.css';
+        document.head.appendChild(cssLink);
+    }
+})();
+
+angular.module("umbraco").config(['$provide', function ($provide) {
+    $provide.decorator("umbPropertyEditorDirective", ['$delegate', '$http', '$compile', function ($delegate, $http, $compile) {
         var directive = $delegate[0];
         var linkFn = directive.link;
 
@@ -419,12 +431,17 @@ angular.module("umbraco").config(function ($provide) {
                                                     <div class="mini-rollback-resizer-s"></div>
                                                     <div class="mini-rollback-resizer-se"></div>
                                                 </div>`);
-
+                                        /*
                                         // Compile and append elements
                                         $compile(modalContainer)(icon.scope());
                                         $compile(popup)(icon.scope());
 
                                         // Add to DOM
+                                        angular.element(document.body).append(modalContainer);
+                                        modalContainer.append(popup);
+                                        */
+
+                                        // Add to DOM - no compilation needed as we're using vanilla JS event handlers
                                         angular.element(document.body).append(modalContainer);
                                         modalContainer.append(popup);
 
@@ -774,7 +791,8 @@ angular.module("umbraco").config(function ($provide) {
         };
 
         return $delegate;
-    });
+    }]);
+}]);
 
     // Add global RTE functions
     if (!window.miniRollbackInitialized) {
@@ -830,7 +848,7 @@ angular.module("umbraco").config(function ($provide) {
                         <div class="mini-rollback-full-html-footer">
                             <div class="mini-rollback-instruction-footer">
                                 <i class="icon icon-info"></i>
-                                <strong>Instructions:</strong> Copy the HTML above and paste it in your RTE's HTML source view (click the HTML button in the RTE toolbar)
+                                <strong>Instructions:</strong> Copy the HTML and paste it in your RTE's HTML source view (click the HTML button in the RTE toolbar)
                             </div>
                         </div>
                     </div>
@@ -905,4 +923,3 @@ angular.module("umbraco").config(function ($provide) {
         // Mark that functions are initialized to prevent re-initialization
         window.miniRollbackInitialized = true;
     }
-});
