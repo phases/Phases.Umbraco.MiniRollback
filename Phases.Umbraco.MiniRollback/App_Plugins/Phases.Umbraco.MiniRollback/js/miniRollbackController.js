@@ -229,7 +229,8 @@ angular.module("umbraco").config(['$provide', function ($provide) {
             return function (scope, element) {
                 if (scope.model && (scope.model.view === "textbox" || scope.model.view === "textarea" || scope.model.view === "rte")) {
 
-                    $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled", { umbIgnoreErrors: true  // This tells Umbraco to NOT show error notifications
+                    $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled", {
+                        umbIgnoreErrors: true  // This tells Umbraco to NOT show error notifications
                     }).then(response => {
                         var isEnabled = response.data;
 
@@ -452,212 +453,22 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                                             </span>
                                                         </span>
                                                     </div>
-                                                    <div class="values-container">${valuesHtml}</div>
-                                                    <div class="resizer-e"></div>
-                                                    <div class="resizer-s"></div>
-                                                    <div class="resizer-se"></div>
+                                                    <div class="mini-rollback-values-container">${valuesHtml}</div>
+                                                    <div class="mini-rollback-resizer-e"></div>
+                                                    <div class="mini-rollback-resizer-s"></div>
+                                                    <div class="mini-rollback-resizer-se"></div>
                                                 </div>`);
-
-                                        // Update the style definitions to ensure they apply in fullscreen mode too
-                                        var styleElement = angular.element(`
-                                                                    <style>
-                                                                        .last-value-modal-container {
-                                                                            position: fixed;
-                                                                            top: 0;
-                                                                            left: 0;
-                                                                            width: 100%;
-                                                                            height: 100%;
-                                                                            background: rgba(0,0,0,0.3);
-                                                                            z-index: 10000;
-                                                                            display: flex;
-                                                                            justify-content: center;
-                                                                            align-items: center;
-                                                                            pointer-events: none;
-                                                                        }
-                                                                        .last-value-modal {
-                                                                            position: absolute;
-                                                                            width: 500px;
-                                                                            height: 400px;
-                                                                            background: white;
-                                                                            border: 1px solid #ccc;
-                                                                            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                                                                            z-index: 10001;
-                                                                            overflow: hidden;
-                                                                            display: flex;
-                                                                            flex-direction: column;
-                                                                            transition: all 0.3s ease;
-                                                                            pointer-events: auto;
-                                                                            border-radius: 3px;
-                                                                        }
-                                                                        .modal-header {
-                                                                            display: flex;
-                                                                            justify-content: space-between;
-                                                                            align-items: center;
-                                                                            padding: 10px 15px;
-                                                                            background: #f8f8f8;
-                                                                            border-bottom: 1px solid #eee;
-                                                                            min-height: 44px;
-                                                                        }
-                                                                        .modal-controls {
-                                                                            display: flex;
-                                                                        }
-                                                                        .modal-controls button {
-                                                                            margin-left: 8px;
-                                                                            background: none;
-                                                                            border: none;
-                                                                            cursor: pointer;
-                                                                            padding: 5px;
-                                                                            width: 30px;
-                                                                            height: 30px;
-                                                                            border-radius: 3px;
-                                                                            display: flex;
-                                                                            align-items: center;
-                                                                            justify-content: center;
-                                                                            transition: all 0.2s ease;
-                                                                        }
-                                                                        .modal-controls button:hover {
-                                                                            background: #eeeeee;
-                                                                        }
-                                                                        .modal-controls button:focus {
-                                                                            outline: none;
-                                                                        }
-                                                                        .modal-controls button.btn-maximize {
-                                                                            color: #2bc37c; /* Umbraco green color */
-                                                                        }
-                                                                        .modal-controls button.btn-close {
-                                                                            color: #d42054; /* Umbraco red color */
-                                                                        }
-                                                                        .modal-controls button i {
-                                                                            font-size: 16px;
-                                                                        }
-                                                                        .modal-header h4 {
-                                                                            margin: 0;
-                                                                            font-size: 16px;
-                                                                            font-weight: 500;
-                                                                            color: #1b264f; /* Umbraco dark blue color */
-                                                                        }
-                                                                        .values-container {
-                                                                            flex: 1;
-                                                                            overflow-y: auto;
-                                                                            padding: 15px;
-                                                                        }
-                                                                        .value-option {
-                                                                            padding: 12px;
-                                                                            border: 1px solid #eee;
-                                                                            border-radius: 3px;
-                                                                            margin-bottom: 10px;
-                                                                            cursor: pointer;
-                                                                            transition: background 0.2s;
-                                                                            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-                                                                        }
-                                                                        .value-option:hover {
-                                                                            background: #f5f5f5;
-                                                                            border-color: #ddd;
-                                                                        }
-                                                                        .value-text {
-                                                                            word-break: break-word;
-                                                                        }
-                                                                        .value-date {
-                                                                            font-size: 11px;
-                                                                            color: #999;
-                                                                            margin-top: 4px;
-                                                                        }
-                                                                        .last-value-modal.fullscreen {
-                                                                            position: fixed !important;
-                                                                            width: 90% !important;
-                                                                            height: 80% !important;
-                                                                            top: 10% !important;
-                                                                            left: 5% !important;
-                                                                            transform: none !important;
-                                                                            max-height: 80vh !important;
-                                                                            border-radius: 4px;
-                                                                            /* Keep all base styles in fullscreen mode */
-                                                                            background: white !important;
-                                                                            border: 1px solid #ccc !important;
-                                                                            box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-                                                                            z-index: 10001 !important;
-                                                                            overflow: hidden !important;
-                                                                            display: flex !important;
-                                                                            flex-direction: column !important;
-                                                                        }
-                                                                        .last-value-modal.fullscreen .values-container {
-                                                                            max-height: calc(80vh - 60px) !important;
-                                                                            height: auto !important;
-                                                                            flex: 1 !important;
-                                                                            overflow-y: auto !important;
-                                                                            padding: 15px !important;
-                                                                        }
-                                                                        .last-value-modal.fullscreen .modal-header {
-                                                                            background: #f8f8f8 !important;
-                                                                            border-bottom: 1px solid #eee !important;
-                                                                            min-height: 44px !important;
-                                                                        }
-                                                                        .last-value-modal.fullscreen .value-option {
-                                                                            padding: 12px !important;
-                                                                            border: 1px solid #eee !important;
-                                                                            border-radius: 3px !important;
-                                                                            margin-bottom: 10px !important;
-                                                                            cursor: pointer !important;
-                                                                            box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
-                                                                        }
-                                                                        .last-value-modal.fullscreen .value-option:hover {
-                                                                            background: #f5f5f5 !important;
-                                                                            border-color: #ddd !important;
-                                                                        }
-                                                                        .resizer-e, .resizer-s, .resizer-se {
-                                                                            position: absolute;
-                                                                        }
-                                                                        .resizer-e {
-                                                                            right: 0;
-                                                                            top: 0;
-                                                                            width: 5px;
-                                                                            height: 100%;
-                                                                            cursor: e-resize;
-                                                                        }
-                                                                        .resizer-s {
-                                                                            bottom: 0;
-                                                                            left: 0;
-                                                                            height: 5px;
-                                                                            width: 100%;
-                                                                            cursor: s-resize;
-                                                                        }
-                                                                        .resizer-se {
-                                                                            right: 0;
-                                                                            bottom: 0;
-                                                                            width: 10px;
-                                                                            height: 10px;
-                                                                            cursor: se-resize;
-                                                                        }
-                                                                        .loader {
-                                                                            position: absolute;
-                                                                            top: 0;
-                                                                            left: 0;
-                                                                            width: 100%;
-                                                                            height: 100%;
-                                                                            background: rgba(255,255,255,0.8);
-                                                                            display: flex;
-                                                                            justify-content: center;
-                                                                            align-items: center;
-                                                                            z-index: 9999;
-                                                                        }
-                                                                        /* Custom icon style to match Umbraco */
-                                                                        .custom-icon {
-                                                                            color: #1b264f;
-                                                                            font-size: 16px;
-                                                                            transition: color 0.2s;
-                                                                        }
-                                                                        .custom-icon:hover {
-                                                                            color: #2bc37c;
-                                                                        }
-                                                                    </style>
-                                                                    `);
-
+                                        /*
                                         // Compile and append elements
                                         $compile(modalContainer)(icon.scope());
                                         $compile(popup)(icon.scope());
 
                                         // Add to DOM
-                                        angular.element(document.body).append(styleElement);
+                                        angular.element(document.body).append(modalContainer);
+                                        modalContainer.append(popup);
+                                        */
+
+                                        // Add to DOM - no compilation needed as we're using vanilla JS event handlers
                                         angular.element(document.body).append(modalContainer);
                                         modalContainer.append(popup);
 
@@ -683,8 +494,8 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                             transform: popup.css('transform')
                                         };
 
-                                        // Maximize button click event - prevent default to avoid form submission
-                                        popup.find('button.btn-maximize').on('click', function (e) {
+                                        // Enhanced toggle diff highlighting
+                                        popup.find('button.mini-rollback-btn-toggle-diff').on('click', function (e) {
                                             e.preventDefault();
                                             e.stopPropagation();
 
@@ -772,46 +583,16 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                                 popup.addClass('mini-rollback-fullscreen');
                                                 popup.css({
                                                     position: 'fixed',
-                                                    width: '90%',
-                                                    height: '80%',
-                                                    maxHeight: '80vh',
-                                                    top: '10%',
-                                                    left: '5%',
-                                                    transform: 'none',
-                                                    background: 'white',
-                                                    border: '1px solid #ccc',
-                                                    borderRadius: '4px',
-                                                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                                                    zIndex: '10001',
-                                                    overflow: 'hidden',
-                                                    display: 'flex',
-                                                    flexDirection: 'column'
+                                                    width: '95%',
+                                                    height: '90%',
+                                                    maxHeight: '90vh',
+                                                    top: '5%',
+                                                    left: '2.5%',
+                                                    transform: 'none'
                                                 });
 
-                                                // Ensure specific styling is maintained for child elements
-                                                popup.find('.modal-header').css({
-                                                    background: '#f8f8f8',
-                                                    borderBottom: '1px solid #eee',
-                                                    minHeight: '44px'
-                                                });
-
-                                                popup.find('.values-container').css({
-                                                    maxHeight: 'calc(80vh - 60px)',
-                                                    height: 'auto',
-                                                    flex: '1',
-                                                    overflowY: 'auto',
-                                                    padding: '15px'
-                                                });
-
-                                                // Make sure button styles remain consistent
-                                                popup.find('.modal-controls button.btn-maximize').css('color', '#2bc37c');
-                                                popup.find('.modal-controls button.btn-close').css('color', '#d42054');
-
-                                                // Update icon
-                                                popup.find('.btn-maximize i').removeClass('icon-out').addClass('icon-window-popin');
-
-                                                // Hide resizers in fullscreen mode
-                                                popup.find('.resizer-e, .resizer-s, .resizer-se').hide();
+                                                popup.find('.mini-rollback-btn-maximize i').removeClass('icon-out').addClass('icon-window-popin');
+                                                popup.find('.mini-rollback-resizer-e, .mini-rollback-resizer-s, .mini-rollback-resizer-se').hide();
                                             } else {
                                                 popup.removeClass('mini-rollback-fullscreen');
                                                 popup.find('.mini-rollback-btn-maximize i').removeClass('icon-window-popin').addClass('icon-out');
@@ -1037,5 +818,135 @@ angular.module("umbraco").config(['$provide', function ($provide) {
         };
 
         return $delegate;
-    });
-});
+    }]);
+}]);
+
+// Add global RTE functions
+if (!window.miniRollbackInitialized) {
+    // Helper function for escaping HTML
+    function escapeHtmlGlobal(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    window.copyRteContent = function (textareaId, type) {
+        var textarea = document.getElementById(textareaId);
+        if (!textarea) return;
+
+        var content = textarea.value;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(content).then(function () {
+                showMiniRollbackNotification('HTML copied to clipboard! Paste it in the RTE\'s HTML source view.');
+            }).catch(function () {
+                fallbackCopyTextToClipboard(content);
+            });
+        } else {
+            fallbackCopyTextToClipboard(content);
+        }
+    };
+
+    window.viewFullHtml = function (textareaId) {
+        var textarea = document.getElementById(textareaId);
+        if (!textarea) return;
+
+        var content = textarea.value;
+
+        // Create a modal to show full HTML
+        var fullHtmlModal = `
+                <div class="mini-rollback-full-html-modal-container" onclick="closeMiniRollbackFullHtmlModal(event)">
+                    <div class="mini-rollback-full-html-modal">
+                        <div class="mini-rollback-full-html-header">
+                            <h4>Complete HTML Content</h4>
+                            <div class="mini-rollback-full-html-controls">
+                                <button onclick="copyMiniRollbackFullHtml()" class="mini-rollback-btn-copy-full">
+                                    <i class="icon icon-code"></i> Copy HTML
+                                </button>
+                                <button onclick="closeMiniRollbackFullHtmlModal()" class="mini-rollback-btn-close-full">
+                                    <i class="icon icon-delete"></i> Close
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mini-rollback-full-html-content">
+                            <textarea id="miniRollbackFullHtmlTextarea" readonly>${escapeHtmlGlobal(content)}</textarea>
+                        </div>
+                        <div class="mini-rollback-full-html-footer">
+                            <div class="mini-rollback-instruction-footer">
+                                <i class="icon icon-info"></i>
+                                <strong>Instructions:</strong> Copy the HTML and paste it in your RTE's HTML source view (click the HTML button in the RTE toolbar)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        var modalElement = angular.element(fullHtmlModal);
+        angular.element(document.body).append(modalElement);
+    };
+
+    window.closeMiniRollbackFullHtmlModal = function (event) {
+        if (event && event.target !== event.currentTarget) return;
+        angular.element('.mini-rollback-full-html-modal-container').remove();
+    };
+
+    window.copyMiniRollbackFullHtml = function () {
+        var textarea = document.getElementById('miniRollbackFullHtmlTextarea');
+        if (textarea) {
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showMiniRollbackNotification('HTML copied to clipboard! Paste it in your RTE\'s HTML source view.');
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
+            }
+        }
+    };
+
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                showMiniRollbackNotification('HTML copied to clipboard! Paste it in your RTE\'s HTML source view.');
+            } else {
+                showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
+            }
+        } catch (err) {
+            showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    function showMiniRollbackNotification(message, isError = false) {
+        var notification = angular.element(`
+                <div class="mini-rollback-notification ${isError ? 'mini-rollback-error' : 'mini-rollback-success'}">
+                    <i class="icon ${isError ? 'icon-delete' : 'icon-check'}"></i>
+                    <div class="mini-rollback-notification-content">
+                        <div class="mini-rollback-notification-title">${isError ? 'Copy Failed' : 'Success!'}</div>
+                        <div class="mini-rollback-notification-message">${message}</div>
+                    </div>
+                </div>
+            `);
+
+        angular.element(document.body).append(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
+    // Mark that functions are initialized to prevent re-initialization
+    window.miniRollbackInitialized = true;
+}
