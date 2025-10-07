@@ -1,9 +1,8 @@
 {
   "javascript": [
-    "/App_Plugins/Phases.Umbraco.MiniRollback/js/miniRollbackController.js?v=0.0080"
+    "/App_Plugins/Phases.Umbraco.MiniRollback/js/miniRollbackController.js"
   ],
   "css": [
-
-    "~/App_Plugins/Phases.Umbraco.MiniRollback/css/style.minirollback.css?v=0.0016"
+    "/App_Plugins/Phases.Umbraco.MiniRollback/css/style.minirollback.css"
   ]
 }

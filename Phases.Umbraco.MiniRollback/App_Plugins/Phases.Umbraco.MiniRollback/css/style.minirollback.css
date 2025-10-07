@@ -1,188 +1,918 @@
-.last-value-modal {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 8px;
-    z-index: 1050;
-    width: 300px;
-    background-color: var(--white, #fff);
-    border: 1px solid var(--gray-200, #e0e0e0);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+
+.mini-rollback-icon {
+    color: #1b264f !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    margin-left: 8px !important;
+    font-size: 16px !important;
+    opacity: 0.75 !important;
+    vertical-align: middle !important;
+    display: inline-block !important;
+}
+
+    .mini-rollback-icon:hover,
+    .mini-rollback-icon.mini-rollback-icon-hover {
+        color: #2bc37c !important;
+        opacity: 1 !important;
+        transform: scale(1.1) !important;
+        filter: drop-shadow(0 0 2px rgba(43, 195, 124, 0.4)) !important;
+    }
+
+.umb-property-editor .mini-rollback-icon {
+    font-weight: normal !important;
+    text-decoration: none !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.umb-property-editor label .mini-rollback-icon {
+    font-weight: normal !important;
+}
+
+/* ==========================================================================
+   MODAL CONTAINER & MAIN MODAL (unchanged)
+   ========================================================================== */
+
+.mini-rollback-modal-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0,0,0,0.4) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    pointer-events: none !important;
+}
+
+.mini-rollback-modal {
+    position: absolute !important;
+    width: 850px !important;
+    height: 650px !important;
+    min-width: 400px !important;
+    min-height: 300px !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    background: white !important;
+    border: 2px solid #1b264f !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+    z-index: 1000000 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: none !important;
+    pointer-events: auto !important;
+    border-radius: 6px !important;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* ==========================================================================
+   MODAL HEADER (unchanged)
+   ========================================================================== */
+
+.mini-rollback-modal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    background: linear-gradient(135deg, #1b264f 0%, #2c3e50 100%) !important;
+    color: white !important;
+    border-bottom: none !important;
+    min-height: 48px !important;
+    flex-shrink: 0 !important;
+}
+
+    .mini-rollback-modal-header h4 {
+        margin: 0 !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: white !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+    }
+
+/* ==========================================================================
+   MODAL CONTROLS (unchanged)
+   ========================================================================== */
+
+.mini-rollback-modal-controls {
+    display: flex !important;
+    gap: 6px !important;
+}
+
+    .mini-rollback-modal-controls .mini-rollback-btn {
+        margin: 0 !important;
+        background: rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        cursor: pointer !important;
+        padding: 6px !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 4px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.2s ease !important;
+        color: white !important;
+    }
+
+        .mini-rollback-modal-controls .mini-rollback-btn:hover {
+            background: rgba(255,255,255,0.2) !important;
+            border-color: rgba(255,255,255,0.3) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .mini-rollback-modal-controls .mini-rollback-btn:focus {
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.3) !important;
+        }
+
+        .mini-rollback-modal-controls .mini-rollback-btn i {
+            font-size: 14px !important;
+            color: white !important;
+        }
+
+/* ==========================================================================
+   DIFF LEGEND HEADER (unchanged)
+   ========================================================================== */
+
+.mini-rollback-diff-legend-header {
+    padding: 10px 16px !important;
+    background: #f8f9fa !important;
+    border-bottom: 1px solid #e9ecef !important;
+    font-size: 12px !important;
+    color: #495057 !important;
+    flex-shrink: 0 !important;
+}
+
+.mini-rollback-legend-item {
+    display: inline-block;
+}
+
+.mini-rollback-diff-added-sample {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.mini-rollback-diff-removed-sample {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 2px 4px;
+    border-radius: 2px;
+    text-decoration: line-through;
+}
+
+/* ==========================================================================
+   VALUES CONTAINER (unchanged)
+   ========================================================================== */
+
+.mini-rollback-values-container {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+    background: #fafbfc !important;
+}
+
+/* ==========================================================================
+   VALUE OPTIONS (unchanged)
+   ========================================================================== */
+
+.mini-rollback-value-option {
+    padding: 16px !important;
+    border: 1px solid #e1e5e9 !important;
+    border-radius: 6px !important;
+    margin-bottom: 16px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06) !important;
+    position: relative !important;
+    background: white !important;
+}
+
+    .mini-rollback-value-option.mini-rollback-selectable {
+        cursor: pointer !important;
+    }
+
+        .mini-rollback-value-option.mini-rollback-selectable:hover {
+            background: #f8f9fa !important;
+            border-color: #1b264f !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12) !important;
+            transform: translateY(-1px) !important;
+        }
+
+    .mini-rollback-value-option.mini-rollback-no-select {
+        cursor: default !important;
+        background-color: #fff8e1 !important;
+        border-left: 4px solid #ff9800 !important;
+    }
+
+        .mini-rollback-value-option.mini-rollback-no-select:hover {
+            background-color: #fff8e1 !important;
+            transform: none !important;
+        }
+
+    .mini-rollback-value-option.mini-rollback-current-version {
+        border-left: 4px solid #4caf50 !important;
+        background-color: #f1f8e9 !important;
+    }
+
+    .mini-rollback-value-option.mini-rollback-diff-with-next {
+        border-left: 4px solid #607d8b !important;
+    }
+
+/* ==========================================================================
+   VERSION INFO & LABELS (unchanged)
+   ========================================================================== */
+
+.mini-rollback-version-info {
+    margin-bottom: 12px !important;
+}
+
+.mini-rollback-version-label {
+    display: inline-block !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 4px 8px !important;
+    border-radius: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+    .mini-rollback-version-label.mini-rollback-current-saved {
+        background-color: #e8f5e8 !important;
+        color: #2e7d32 !important;
+    }
+
+    .mini-rollback-version-label.mini-rollback-historical {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+    }
+
+.mini-rollback-diff-legend {
+    font-size: 11px !important;
+    color: #6c757d !important;
+    font-style: italic !important;
+    margin-top: 4px !important;
+}
+
+/* ==========================================================================
+   VALUE TEXT & DATE (unchanged)
+   ========================================================================== */
+
+.mini-rollback-value-text {
+    word-break: break-word !important;
+    line-height: 1.5 !important;
+    margin-bottom: 8px !important;
+    color: #212529 !important;
+}
+
+.mini-rollback-value-date {
+    font-size: 11px !important;
+    color: #6c757d !important;
+    font-style: italic !important;
+}
+
+/* ==========================================================================
+   DIFF HIGHLIGHTING - ONLY IMPROVE VISIBILITY, KEEP STYLE
+   ========================================================================== */
+
+.mini-rollback-diff-added {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    border: 1px solid #c3e6cb !important;
+}
+
+.mini-rollback-diff-removed {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+    text-decoration: line-through !important;
+    font-weight: 600 !important;
+    border: 1px solid #f5c6cb !important;
+}
+
+/* Hide diff when disabled */
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-diff-added,
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-diff-removed {
+    background-color: transparent !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    padding: 0 !important;
+    border: none !important;
+    font-weight: normal !important;
+}
+
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-diff-legend-header {
+    display: none !important;
+}
+
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-diff-legend {
+    display: none !important;
+}
+
+/* ==========================================================================
+   RTE CONTROLS & BUTTONS (unchanged)
+   ========================================================================== */
+
+.mini-rollback-rte-controls {
+    display: flex !important;
+    gap: 8px !important;
+    margin: 8px 0 !important;
+    flex-wrap: wrap !important;
+}
+
+    .mini-rollback-rte-controls button {
+        padding: 6px 12px !important;
+        border: none !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        transition: all 0.2s ease !important;
+    }
+
+.mini-rollback-btn-copy-html {
+    background: #1976d2 !important;
+    color: white !important;
+}
+
+    .mini-rollback-btn-copy-html:hover {
+        background: #1565c0 !important;
+        transform: translateY(-1px) !important;
+    }
+
+.mini-rollback-btn-view-full {
+    background: #757575 !important;
+    color: white !important;
+}
+
+    .mini-rollback-btn-view-full:hover {
+        background: #616161 !important;
+        transform: translateY(-1px) !important;
+    }
+
+/* ==========================================================================
+   INSTRUCTIONS (unchanged)
+   ========================================================================== */
+
+.mini-rollback-rte-instruction {
+    background: #e3f2fd !important;
+    border: 1px solid #90caf9 !important;
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    margin: 8px 0 !important;
+    font-size: 12px !important;
+    color: #1565c0 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    line-height: 1.4 !important;
+}
+
+    .mini-rollback-rte-instruction i {
+        margin-right: 6px !important;
+        margin-top: 2px !important;
+        font-size: 14px !important;
+        color: #1976d2 !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mini-rollback-rte-instruction strong {
+        font-weight: 600 !important;
+        color: #0d47a1 !important;
+    }
+
+.mini-rollback-text-instruction {
+    background: #f3e5f5 !important;
+    border: 1px solid #ce93d8 !important;
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    margin: 8px 0 !important;
+    font-size: 12px !important;
+    color: #6a1b9a !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    line-height: 1.4 !important;
+}
+
+    .mini-rollback-text-instruction i {
+        margin-right: 6px !important;
+        margin-top: 2px !important;
+        font-size: 14px !important;
+        color: #8e24aa !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mini-rollback-text-instruction strong {
+        font-weight: 600 !important;
+        color: #4a148c !important;
+    }
+
+/* Enhanced hover effect for selectable items */
+.mini-rollback-value-option.mini-rollback-selectable .mini-rollback-text-instruction {
+    background: #e8f5e8 !important;
+    border-color: #a5d6a7 !important;
+    color: #2e7d32 !important;
+}
+
+.mini-rollback-value-option.mini-rollback-selectable:hover .mini-rollback-text-instruction {
+    background: #c8e6c9 !important;
+    border-color: #81c784 !important;
+}
+
+.mini-rollback-value-option.mini-rollback-selectable .mini-rollback-text-instruction i {
+    color: #388e3c !important;
+}
+
+.mini-rollback-value-option.mini-rollback-selectable .mini-rollback-text-instruction strong {
+    color: #1b5e20 !important;
+}
+
+/* ==========================================================================
+   RTE SUMMARY SECTION (unchanged)
+   ========================================================================== */
+
+.mini-rollback-rte-summary-section {
+    margin: 8px 0 12px 0 !important;
+    padding: 10px !important;
+    background: #f8f9fa !important;
+    border: 1px solid #e9ecef !important;
+    border-radius: 4px !important;
+}
+
+.mini-rollback-rte-summary-label {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #495057 !important;
+    margin-bottom: 6px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.mini-rollback-rte-summary {
+    font-size: 12px !important;
+    color: #6c757d !important;
+    line-height: 1.4 !important;
+}
+
+/* ==========================================================================
+   RTE HTML CODE DISPLAY - FIXED FOR BETTER READABILITY
+   ========================================================================== */
+
+.mini-rollback-rte-html-code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    background-color: #f8f9fa !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    border: 1px solid #e9ecef !important;
+    white-space: pre-wrap !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+    word-break: break-all !important;
+    color: #495057 !important;
+}
+
+    /* FIXED: Better diff highlighting for RTE code */
+    .mini-rollback-rte-html-code .mini-rollback-diff-added {
+        background-color: #d4edda !important;
+        color: #155724 !important;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
+        text-decoration: none !important;
+        font-weight: 600 !important;
+        border: 1px solid #c3e6cb !important;
+    }
+
+    .mini-rollback-rte-html-code .mini-rollback-diff-removed {
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
+        text-decoration: line-through !important;
+        font-weight: 600 !important;
+        border: 1px solid #f5c6cb !important;
+    }
+
+/* Current version RTE styling */
+.mini-rollback-value-option.mini-rollback-current-version .mini-rollback-rte-html-code {
+    background-color: #f1f8e9 !important;
+    border-color: #4caf50 !important;
+}
+
+/* Historical RTE version styling */
+.mini-rollback-value-option.mini-rollback-rte-diff .mini-rollback-rte-html-code {
+    background-color: #f3f4f6 !important;
+    border-color: #607d8b !important;
+}
+
+/* FIXED: Hide diff styles when disabled */
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-rte-html-code .mini-rollback-diff-added,
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-rte-html-code .mini-rollback-diff-removed {
+    background-color: transparent !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    padding: 0 !important;
+    border: none !important;
+    font-weight: normal !important;
+}
+
+/* FIXED: Non-diff view styling for clean text display */
+.mini-rollback-modal.mini-rollback-modal-diff-disabled .mini-rollback-value-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e1e5e9 !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+/* ==========================================================================
+   REMAINING STYLES (unchanged from original)
+   ========================================================================== */
+
+.mini-rollback-loader {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(255,255,255,0.95) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 1000001 !important;
+    font-size: 14px !important;
+    color: #1b264f !important;
+    font-weight: 500 !important;
+}
+
+.mini-rollback-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
     border-radius: 6px;
     padding: 16px;
-    font-family: inherit;
-    color: var(--gray-800, #333);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    z-index: 25000;
+    display: flex;
+    align-items: flex-start;
+    max-width: 400px;
+    min-width: 300px;
+    animation: slideInRight 0.3s ease-out;
 }
 
-    .last-value-modal h4 {
-        margin: 0 0 12px 0;
-        font-size: 16px;
-        color: var(--gray-900, #202020);
-        border-bottom: 1px solid var(--gray-100, #f0f0f0);
-        padding-bottom: 8px;
+    .mini-rollback-notification.mini-rollback-success {
+        border-left: 4px solid #4caf50;
     }
 
-.values-container {
-    max-height: 250px;
-    overflow-y: auto;
-    margin-bottom: 12px;
-}
-
-.value-option {
-    padding: 8px 12px;
-    margin-bottom: 8px;
-    border: 1px solid var(--gray-100, #f0f0f0);
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-}
-
-    .value-option:hover {
-        background-color: var(--gray-50, #f9f9f9);
+    .mini-rollback-notification.mini-rollback-error {
+        border-left: 4px solid #f44336;
     }
 
-.value-text {
-    font-weight: 500;
-    color: var(--gray-800, #333);
-    cursor: pointer;
+    .mini-rollback-notification i {
+        margin-right: 12px;
+        margin-top: 2px;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .mini-rollback-notification.mini-rollback-success i {
+        color: #4caf50;
+    }
+
+    .mini-rollback-notification.mini-rollback-error i {
+        color: #f44336;
+    }
+
+.mini-rollback-notification-content {
+    flex: 1;
+}
+
+.mini-rollback-notification-title {
+    font-weight: 600;
+    font-size: 14px;
     margin-bottom: 4px;
-    word-break: break-word;
+    color: #212529;
 }
 
-.value-date {
-    font-size: 12px;
-    color: var(--gray-500, #888);
-    font-style: italic;
+.mini-rollback-notification-message {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.4;
 }
 
-.no-values {
-    padding: 12px;
-    text-align: center;
-    color: var(--gray-600, #666);
-    font-style: italic;
+/* ==========================================================================
+   FULLSCREEN, RESIZERS, AND OTHER FEATURES (unchanged)
+   ========================================================================== */
+
+.mini-rollback-modal.mini-rollback-fullscreen {
+    position: fixed !important;
+    width: 95% !important;
+    height: 90% !important;
+    top: 5% !important;
+    left: 2.5% !important;
+    transform: none !important;
+    max-height: 90vh !important;
+    max-width: 95vw !important;
 }
 
-.last-value-modal button {
-    display: inline-block;
-    background-color: var(--primary, #0078d4);
-    color: #fff;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+.mini-rollback-resizer-e,
+.mini-rollback-resizer-s,
+.mini-rollback-resizer-se {
+    position: absolute !important;
+    background: transparent !important;
 }
 
-    .last-value-modal button:hover {
-        background-color: var(--primary-dark, #005a9e);
+.mini-rollback-resizer-e {
+    right: 0 !important;
+    top: 0 !important;
+    width: 8px !important;
+    height: 100% !important;
+    cursor: e-resize !important;
+}
+
+.mini-rollback-resizer-s {
+    bottom: 0 !important;
+    left: 0 !important;
+    height: 8px !important;
+    width: 100% !important;
+    cursor: s-resize !important;
+}
+
+.mini-rollback-resizer-se {
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 16px !important;
+    height: 16px !important;
+    cursor: se-resize !important;
+}
+
+    .mini-rollback-resizer-se:after {
+        content: '' !important;
+        position: absolute !important;
+        right: 4px !important;
+        bottom: 4px !important;
+        width: 8px !important;
+        height: 8px !important;
+        border-right: 2px solid #ccc !important;
+        border-bottom: 2px solid #ccc !important;
     }
 
-    .last-value-modal button:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.25);
-    }
-
-/* Custom icon styling */
-.custom-icon {
-    color: var(--gray-600, #666);
-    transition: color 0.2s ease;
-}
-
-    .custom-icon:hover {
-        color: var(--primary, #0078d4);
-    }
-
-.loader {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.last-value-modal {
-    position: absolute;
-    top: 30px;
-    left: 0;
-    z-index: 1000;
-    background: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    min-width: 200px;
-    min-height: 100px;
-    width: 300px;
-    height: auto;
-    max-height: 400px;
-    overflow: auto;
-}
-
-/* Right edge resizer */
-.resizer-e {
-    position: absolute;
+/* Full HTML modal styles */
+.mini-rollback-full-html-modal-container {
+    position: fixed;
     top: 0;
-    right: 0;
-    width: 5px;
-    height: 100%;
-    background: transparent;
-    cursor: e-resize;
-}
-
-/* Bottom edge resizer */
-.resizer-s {
-    position: absolute;
-    bottom: 0;
     left: 0;
     width: 100%;
-    height: 5px;
-    background: transparent;
-    cursor: s-resize;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 20000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Corner resizer */
-.resizer-se {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 16px;
-    height: 16px;
-    background: transparent;
-    cursor: se-resize;
+.mini-rollback-full-html-modal {
+    width: 85%;
+    height: 80%;
+    max-width: 1000px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
-    .resizer-se:after {
-        content: "";
-        position: absolute;
-        right: 3px;
-        bottom: 3px;
-        width: 10px;
-        height: 10px;
-        border-right: 2px solid #888;
-        border-bottom: 2px solid #888;
+.mini-rollback-full-html-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+    .mini-rollback-full-html-header h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
     }
 
-
-.last-value-modal.fullscreen {
-    position: fixed !important; /* Ensure fixed positioning */
-    width: 90% !important;
-    height: 80% !important;
-    top: 10% !important;
-    left: 5% !important;
-    transform: none !important;
-    max-height: 80vh !important; /* Set a max-height relative to viewport height */
+.mini-rollback-full-html-controls {
+    display: flex;
+    gap: 10px;
 }
 
-    .last-value-modal.fullscreen .values-container {
-        max-height: calc(80vh - 60px) !important; /* Subtract header height */
-        height: auto !important;
-        flex: 1 !important;
+    .mini-rollback-full-html-controls button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
     }
 
-.rte-content {
-    max-height: 200px;
-    overflow-y: auto;
+.mini-rollback-btn-copy-full {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
 }
+
+    .mini-rollback-btn-copy-full:hover {
+        background: rgba(255,255,255,0.3);
+    }
+
+.mini-rollback-btn-close-full {
+    background: rgba(244,67,54,0.8);
+    color: white;
+}
+
+    .mini-rollback-btn-close-full:hover {
+        background: rgba(244,67,54,1);
+    }
+
+.mini-rollback-full-html-content {
+    flex: 1;
+    padding: 20px;
+    overflow: hidden;
+}
+
+#miniRollbackFullHtmlTextarea {
+    width: 100%;
+    height: 100%;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 12px;
+    resize: none;
+    background: #fafafa;
+    line-height: 1.4;
+}
+
+.mini-rollback-full-html-footer {
+    padding: 16px 20px;
+    background: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 0 0 8px 8px;
+}
+
+.mini-rollback-instruction-footer {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #1565c0;
+    line-height: 1.4;
+}
+
+    .mini-rollback-instruction-footer i {
+        margin-right: 8px;
+        font-size: 16px;
+        color: #1976d2;
+    }
+
+    .mini-rollback-instruction-footer strong {
+        font-weight: 600;
+        color: #0d47a1;
+    }
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .mini-rollback-modal {
+        width: 95vw !important;
+        height: 90vh !important;
+        max-width: none !important;
+        max-height: none !important;
+    }
+
+    .mini-rollback-full-html-modal {
+        width: 95% !important;
+        height: 85% !important;
+    }
+
+    .mini-rollback-notification {
+        right: 10px !important;
+        left: 10px !important;
+        width: auto !important;
+        min-width: auto !important;
+    }
+}
+
+/* Accessibility */
+@media (prefers-contrast: high) {
+    .mini-rollback-modal {
+        border: 3px solid #000 !important;
+    }
+
+    .mini-rollback-diff-added {
+        border: 2px solid #000 !important;
+    }
+
+    .mini-rollback-diff-removed {
+        border: 2px solid #000 !important;
+    }
+
+    .mini-rollback-icon {
+        border: 1px solid currentColor !important;
+        border-radius: 2px !important;
+        padding: 2px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mini-rollback-icon,
+    .mini-rollback-value-option,
+    .mini-rollback-btn,
+    .mini-rollback-modal-controls .mini-rollback-btn {
+        transition: none !important;
+    }
+
+    .mini-rollback-notification {
+        animation: none !important;
+    }
+
+    .mini-rollback-icon:hover,
+    .mini-rollback-icon.mini-rollback-icon-hover {
+        transform: none !important;
+        filter: none !important;
+    }
+
+    .mini-rollback-value-option.mini-rollback-selectable:hover {
+        transform: none !important;
+    }
+}
+
+@media print {
+    .mini-rollback-modal-container,
+    .mini-rollback-full-html-modal-container,
+    .mini-rollback-notification,
+    .mini-rollback-icon {
+        display: none !important;
+    }
+}
+
+/* Scrollbar styling */
+.mini-rollback-values-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.mini-rollback-values-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.mini-rollback-values-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+    .mini-rollback-values-container::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
+
+/* Focus management for accessibility */
+.mini-rollback-icon:focus {
+    outline: 2px solid #2bc37c !important;
+    outline-offset: 2px !important;
+}
+
+.mini-rollback-value-option.mini-rollback-selectable:focus {
+    outline: 2px solid #1b264f !important;
+    outline-offset: 2px !important;
+}
+
+.mini-rollback-modal:focus-within {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 3px rgba(27, 38, 79, 0.3) !important;
+}
+
+/* End of CSS file */

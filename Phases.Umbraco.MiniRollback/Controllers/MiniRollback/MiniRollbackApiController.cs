@@ -23,27 +23,53 @@ namespace Phases.Umbraco.MiniRollback.Controllers.MiniRollback
         }
 
         [HttpGet]
-        public bool IsEnabled()
+        public IActionResult IsEnabled()
         {
-            return _miniRollbackServices.IsEnabled;
+            try
+            {
+                return Ok(_miniRollbackServices.IsEnabled);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error checking service status" });
+            }
         }
 
         public object GetLastValue(int nodeId, string alias, string elementKey = null)
         {
 
-            if (nodeId <= 0 || string.IsNullOrWhiteSpace(alias))
+            try
             {
-                return NotFound(new { message = "Node not found", values = new List<HistoryData>() });
+                if (nodeId <= 0 || string.IsNullOrWhiteSpace(alias))
+                {
+                    return BadRequest(new { message = "Invalid parameters", values = new List<HistoryData>() });
+                }
+
+                var historyData = _miniRollbackServices.GetVersionHistories(nodeId, alias, elementKey);
+
+                if (historyData == null || !historyData.Any())
+                {
+                    historyData = new List<HistoryData>
+                    {
+                        new HistoryData { Value = "No history found...", Updated = "" }
+                    };
+                }
+
+                var distinctData = historyData.DistinctBy(x => x.Value).ToList();
+                return Ok(new { values = distinctData });
             }
-
-            var historyData = _miniRollbackServices.GetVersionHistories(nodeId, alias, elementKey) ?? new List<HistoryData>();
-
-            if (!historyData.Any())
+            catch (Exception ex)
             {
-                historyData.Add(new HistoryData { Value = "No history found...", Updated = "" });
+               
+                return StatusCode(500, new
+                {
+                    message = "Error retrieving version history",
+                    values = new List<HistoryData>
+                    {
+                        new HistoryData { Value = "Error loading history. Please try again.", Updated = "" }
+                    }
+                });
             }
-
-            return Ok(new { values = historyData.DistinctBy(x => x.Value) });
 
         }
     }
