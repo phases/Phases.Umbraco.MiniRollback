@@ -1,4 +1,5 @@
 // Dynamically load CSS file - ensures it loads even when Debug: false
+/*
 (function () {
     if (!document.getElementById('miniRollbackStyles')) {
         var cssLink = document.createElement('link');
@@ -9,6 +10,28 @@
         document.head.appendChild(cssLink);
     }
 })();
+*/
+
+// BEST SOLUTION: HTTP Interceptor to suppress MiniRollback 404 errors
+angular.module("umbraco").config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.interceptors.push(['$q', function ($q) {
+        return {
+            'responseError': function (rejection) {
+                // Suppress 404 errors for MiniRollback endpoints
+                if (rejection.status === 404 &&
+                    rejection.config &&
+                    rejection.config.url &&
+                    (rejection.config.url.indexOf('MiniRollbackApi') !== -1 ||
+                        rejection.config.url.indexOf('lastvalues') !== -1)) {
+                    // Silently reject without showing notification
+                    return $q.reject(rejection);
+                }
+                // Let other errors through
+                return $q.reject(rejection);
+            }
+        };
+    }]);
+}]);
 
 angular.module("umbraco").config(['$provide', function ($provide) {
     $provide.decorator("umbPropertyEditorDirective", ['$delegate', '$http', '$compile', function ($delegate, $http, $compile) {
@@ -206,7 +229,8 @@ angular.module("umbraco").config(['$provide', function ($provide) {
             return function (scope, element) {
                 if (scope.model && (scope.model.view === "textbox" || scope.model.view === "textarea" || scope.model.view === "rte")) {
 
-                    $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled").then(response => {
+                    $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled", { umbIgnoreErrors: true  // This tells Umbraco to NOT show error notifications
+                    }).then(response => {
                         var isEnabled = response.data;
 
                         if (!isEnabled) {
@@ -255,7 +279,9 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                         url += "&elementKey=" + elementKey;
                                     }
 
-                                    $http.get(url).then(response => {
+                                    $http.get(url, {
+                                        umbIgnoreErrors: true  // This tells Umbraco to NOT show error notifications
+                                    }).then(response => {
                                         // Get current value for comparison
                                         var currentValue = input.val() || '';
                                         var isRte = scope.model.view === "rte";
