@@ -1,52 +1,57 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <ContentTargetFolders>.</ContentTargetFolders>
   </PropertyGroup>
-
+  
   <PropertyGroup>
     <PackageId>Phases.Umbraco.MiniRollback</PackageId>
     <Product>Phases.Umbraco.MiniRollback</Product>
     <Title>Phases.Umbraco.MiniRollback</Title>
-    <Description>Phases.Umbraco.MiniRollback is an Umbraco 10+ package that adds version history access directly to your content editing interface. 
+    <Description>Phases.Umbraco.MiniRollback is an Umbraco 13+ package that adds version history access directly to your content editing interface. 
 By placing a small icon next to text fields, rich text editors, and textareas, editors can instantly view previous versions of specific content fields in a simple popup without leaving the page. 
 Making content comparison and recovery faster and easier than ever.</Description>
     <PackageTags>umbraco plugin package;umbraco-marketplace;umbraco;umbraco-v10;umbraco-v11;umbraco-v12;umbraco-v13</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.6.11</Version>
+    <Version>1.0.7.31</Version>
     <Authors>midhun_roy</Authors>
     <Company>Phases</Company>
     <PackageIcon>Phases-Umbraco-MiniRollback.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github.com/phases/Phases.Umbraco.MiniRollback/tree/main/Phases.Umbraco.MiniRollback</PackageProjectUrl>
     <RepositoryUrl>https://github.com/phases/Phases.Umbraco.MiniRollback/tree/main/Phases.Umbraco.MiniRollback</RepositoryUrl>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/phases/Phases.Umbraco.MiniRollback/tree/main/Phases.Umbraco.MiniRollback</PackageProjectUrl>
   </PropertyGroup>
-
+  
+  <!-- CRITICAL: Pack App_Plugins to contentFiles so .targets can find them -->
   <ItemGroup>
-    <Content Include="App_Plugins\Phases.Umbraco.MiniRollback\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
+    <None Include="App_Plugins\Phases.Umbraco.MiniRollback\**\*.*">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles\any\any\App_Plugins\Phases.Umbraco.MiniRollback</PackagePath>
+    </None>
+  </ItemGroup>
+  
+  <!-- Include buildTransitive folder with .targets file -->
+  <ItemGroup>
     <None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive" />
   </ItemGroup>
-
+  
+  <!-- Include README -->
   <ItemGroup>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
+  
+  <!-- Umbraco Dependencies -->
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.8.9" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.8.9" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.7.1" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="13.7.1" />
   </ItemGroup>
-
+  
+  <!-- Include Icon -->
   <ItemGroup>
-    <None Update="License.txt">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
     <None Update="Phases-Umbraco-MiniRollback.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

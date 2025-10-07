@@ -17,6 +17,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
     {
         private readonly IContentService _contentService;
         private readonly IConfiguration _configuration;
+
         public MiniRollbackServices(IContentService contentService, IConfiguration configuration)
         {
             _contentService = contentService;
@@ -24,6 +25,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
         }
 
         public bool IsEnabled => _configuration.GetValue<bool>("Phases:MiniRollback:Enabled", true);
+
         public List<HistoryData> GetVersionHistories(int nodeId, string alias, string elementKey = null)
         {
             var historyData = new List<HistoryData>();
@@ -33,7 +35,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
             {
                 var versions = _contentService.GetVersions(nodeId)
                     .OrderByDescending(v => v.UpdateDate)
-                    .Skip(1) // Skip latest version
+                    .Skip(1)
                     .ToList();
 
                 if (versions.Any())
@@ -60,7 +62,6 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
 
                 if (value != null)
                 {
-                    // Process the value to handle potential RTE JSON format
                     var processedValue = ProcessRteValueIfNeeded(value);
 
                     historyList.Add(new HistoryData
@@ -80,7 +81,6 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
 
             var stringValue = value.ToString();
 
-            // Check if the value is potentially a JSON string with the RTE structure
             if (stringValue.StartsWith("{") && stringValue.Contains("\"markup\""))
             {
                 try
@@ -93,7 +93,6 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
                 }
                 catch (JsonReaderException)
                 {
-                    // If parsing fails, return the original value
                 }
             }
 
@@ -106,8 +105,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
             var historyData = new List<HistoryData>();
 
             var jsonContent = JsonConvert.SerializeObject(versions);
-
-            JArray jsonArray = JArray.Parse(jsonContent); // Use JArray since versions are a list
+            JArray jsonArray = JArray.Parse(jsonContent);
 
             foreach (var version in jsonArray)
             {
@@ -118,47 +116,99 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
                 foreach (var property in properties)
                 {
                     var publishedValue = property["Values"]?.First?["EditedValue"]?.ToString();
+
                     if (string.IsNullOrEmpty(publishedValue)) continue;
 
                     try
                     {
                         if (publishedValue.StartsWith("{"))
                         {
-                            JObject blockListJson = JObject.Parse(publishedValue);
+                            JObject propertyJson = JObject.Parse(publishedValue);
 
-                            // Check if it's a block list structure
-                            if (blockListJson["contentData"] != null)
+                            var foundValue = FindElementValueInJson(propertyJson, normalizedElementKey, alias);
+
+                            if (foundValue != null)
                             {
-                                var contentData = blockListJson["contentData"];
+                                var processedValue = ProcessRteValueIfNeeded(foundValue);
 
-                                var matchingBlock = contentData?.FirstOrDefault(cd =>
-                                    cd["udi"] != null && cd["udi"].ToString().ToLower() == normalizedElementKey);
-
-                                if (matchingBlock != null)
+                                historyData.Add(new HistoryData
                                 {
-                                    var blockValue = matchingBlock[alias]?.ToString();
-
-                                    // Process the value if it's in RTE JSON format
-                                    var processedValue = ProcessRteValueIfNeeded(blockValue);
-
-                                    var history = new HistoryData
-                                    {
-                                        Value = processedValue,
-                                        Updated = updatedDate.ToString("MMMM d, yyyy h:mm tt")
-                                    };
-
-                                    historyData.Add(history);
-                                }
+                                    Value = processedValue,
+                                    Updated = updatedDate.ToString("MMMM d, yyyy h:mm tt")
+                                });
                             }
                         }
                     }
                     catch (JsonReaderException)
                     {
-                        continue; // Skip if PublishedValue is not valid JSON
+                        continue;
                     }
                 }
             }
+
             return historyData;
+        }
+
+        private string FindElementValueInJson(JToken token, string normalizedElementKey, string propertyAlias)
+        {
+            if (token == null) return null;
+
+            // If it's an object
+            if (token is JObject obj)
+            {
+                // First, check if this object is the element we're looking for
+                var udi = obj["udi"]?.ToString().ToLower();
+                if (udi == normalizedElementKey)
+                {
+                    var value = obj[propertyAlias];
+                    if (value != null)
+                    {
+                        return value.ToString();
+                    }
+                }
+
+                // Then search through all properties
+                foreach (var prop in obj.Properties())
+                {
+                    var propValue = prop.Value;
+
+                    // If the property value is a JSON string, parse it and search within
+                    if (propValue.Type == JTokenType.String)
+                    {
+                        var stringValue = propValue.ToString();
+                        if (stringValue.StartsWith("{") || stringValue.StartsWith("["))
+                        {
+                            try
+                            {
+                                var parsedJson = JToken.Parse(stringValue);
+                                var result = FindElementValueInJson(parsedJson, normalizedElementKey, propertyAlias);
+                                if (result != null) return result;
+                            }
+                            catch (JsonReaderException)
+                            {
+                                // Not valid JSON, skip
+                            }
+                        }
+                    }
+                    // If it's an object or array, search recursively
+                    else if (propValue is JObject || propValue is JArray)
+                    {
+                        var result = FindElementValueInJson(propValue, normalizedElementKey, propertyAlias);
+                        if (result != null) return result;
+                    }
+                }
+            }
+            // If it's an array
+            else if (token is JArray array)
+            {
+                foreach (var item in array)
+                {
+                    var result = FindElementValueInJson(item, normalizedElementKey, propertyAlias);
+                    if (result != null) return result;
+                }
+            }
+
+            return null;
         }
     }
 }
