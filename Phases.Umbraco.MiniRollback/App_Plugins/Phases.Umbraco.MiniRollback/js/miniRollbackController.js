@@ -395,8 +395,12 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                                 diffHtml = createRteCodeDiff(originalText, newerProcessedContent, isRte);
                                                 shouldShowDiff = true;
 
-                                                // Start with diff view enabled by default
-                                                displayValue = diffHtml;
+                                                // Start with clean view as default
+                                                if (isRte) {
+                                                    displayValue = escapeHtml(originalText);
+                                                } else {
+                                                    displayValue = escapeHtml(originalText);
+                                                }
                                             }
 
                                             // Create unique IDs for this value option
@@ -428,12 +432,12 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                         var modalContainer = angular.element(`<div class="mini-rollback-modal-container"></div>`);
 
                                         var popup = angular.element(`
-                                                <div class="mini-rollback-modal">
+                                                <div class="mini-rollback-modal mini-rollback-modal-diff-disabled">
                                                     <div class="mini-rollback-modal-header">
                                                         <h4>Previous Values - ${scope.model.label || alias} ${isRte ? '(HTML View)' : ''}</h4>
                                                         <div class="mini-rollback-modal-controls">
-                                                            <button type="button" class="mini-rollback-btn mini-rollback-btn-toggle-diff" title="Toggle Diff View">
-                                                                <i class="icon icon-eye"></i>
+                                                            <button type="button" class="mini-rollback-btn mini-rollback-btn-toggle-diff" title="Show Diff View">
+                                                                <i class="icon icon-block"></i>
                                                             </button>
                                                             <button type="button" class="mini-rollback-btn mini-rollback-btn-maximize" title="Maximize">
                                                                 <i class="icon icon-out"></i>
@@ -484,7 +488,7 @@ angular.module("umbraco").config(['$provide', function ($provide) {
 
                                         // Track fullscreen and diff state
                                         var isFullscreen = false;
-                                        var isDiffEnabled = true;
+                                        var isDiffEnabled = false;
                                         var originalStyles = {
                                             width: popup.css('width'),
                                             height: popup.css('height'),
