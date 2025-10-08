@@ -38,6 +38,36 @@ angular.module("umbraco").config(['$provide', function ($provide) {
         var directive = $delegate[0];
         var linkFn = directive.link;
 
+
+        // ============================================
+        // CONTEXT CHECK: Only show in content nodes
+        // ============================================
+        function isInContentNode() {
+            var currentUrl = window.location.href || window.location.hash;
+
+            // Check if we're in content editing context
+            if (currentUrl.includes('#/content/content/edit/')) {
+                return true;
+            }
+
+            // Exclude DocTypes, DataTypes, and other settings
+            if (currentUrl.includes('#/settings/documentTypes/') ||
+                currentUrl.includes('#/settings/dataTypes/') ||
+                currentUrl.includes('#/settings/') ||
+                currentUrl.includes('#/member/member/edit/') ||
+                currentUrl.includes('#/media/media/edit/')) {
+                return false;
+            }
+
+            // Additional check: look for node ID in URL pattern
+            var nodeIdMatch = currentUrl.match(/#\/content\/content\/edit\/(\d+)/);
+            if (nodeIdMatch && nodeIdMatch[1]) {
+                return true;
+            }
+
+            return false;
+        }
+
         // Text diff function to highlight changes
         function createTextDiff(oldText, newText) {
             if (!oldText || !newText) return escapeHtml(newText || '');
@@ -229,7 +259,13 @@ angular.module("umbraco").config(['$provide', function ($provide) {
             return function (scope, element) {
                 if (scope.model && (scope.model.view === "textbox" || scope.model.view === "textarea" || scope.model.view === "rte")) {
 
-                    $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled", { umbIgnoreErrors: true  // This tells Umbraco to NOT show error notifications
+                    if (!isInContentNode()) {
+                        // We're not in a content node, skip icon attachment
+                        return;
+                    }
+
+                    $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled", {
+                        umbIgnoreErrors: true  // This tells Umbraco to NOT show error notifications
                     }).then(response => {
                         var isEnabled = response.data;
 
@@ -824,41 +860,41 @@ angular.module("umbraco").config(['$provide', function ($provide) {
     }]);
 }]);
 
-    // Add global RTE functions
-    if (!window.miniRollbackInitialized) {
-        // Helper function for escaping HTML
-        function escapeHtmlGlobal(text) {
-            if (!text) return '';
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+// Add global RTE functions
+if (!window.miniRollbackInitialized) {
+    // Helper function for escaping HTML
+    function escapeHtmlGlobal(text) {
+        if (!text) return '';
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-        window.copyRteContent = function (textareaId, type) {
-            var textarea = document.getElementById(textareaId);
-            if (!textarea) return;
+    window.copyRteContent = function (textareaId, type) {
+        var textarea = document.getElementById(textareaId);
+        if (!textarea) return;
 
-            var content = textarea.value;
+        var content = textarea.value;
 
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(content).then(function () {
-                    showMiniRollbackNotification('HTML copied to clipboard! Paste it in the RTE\'s HTML source view.');
-                }).catch(function () {
-                    fallbackCopyTextToClipboard(content);
-                });
-            } else {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(content).then(function () {
+                showMiniRollbackNotification('HTML copied to clipboard! Paste it in the RTE\'s HTML source view.');
+            }).catch(function () {
                 fallbackCopyTextToClipboard(content);
-            }
-        };
+            });
+        } else {
+            fallbackCopyTextToClipboard(content);
+        }
+    };
 
-        window.viewFullHtml = function (textareaId) {
-            var textarea = document.getElementById(textareaId);
-            if (!textarea) return;
+    window.viewFullHtml = function (textareaId) {
+        var textarea = document.getElementById(textareaId);
+        if (!textarea) return;
 
-            var content = textarea.value;
+        var content = textarea.value;
 
-            // Create a modal to show full HTML
-            var fullHtmlModal = `
+        // Create a modal to show full HTML
+        var fullHtmlModal = `
                 <div class="mini-rollback-full-html-modal-container" onclick="closeMiniRollbackFullHtmlModal(event)">
                     <div class="mini-rollback-full-html-modal">
                         <div class="mini-rollback-full-html-header">
@@ -885,55 +921,55 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                 </div>
             `;
 
-            var modalElement = angular.element(fullHtmlModal);
-            angular.element(document.body).append(modalElement);
-        };
+        var modalElement = angular.element(fullHtmlModal);
+        angular.element(document.body).append(modalElement);
+    };
 
-        window.closeMiniRollbackFullHtmlModal = function (event) {
-            if (event && event.target !== event.currentTarget) return;
-            angular.element('.mini-rollback-full-html-modal-container').remove();
-        };
+    window.closeMiniRollbackFullHtmlModal = function (event) {
+        if (event && event.target !== event.currentTarget) return;
+        angular.element('.mini-rollback-full-html-modal-container').remove();
+    };
 
-        window.copyMiniRollbackFullHtml = function () {
-            var textarea = document.getElementById('miniRollbackFullHtmlTextarea');
-            if (textarea) {
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    showMiniRollbackNotification('HTML copied to clipboard! Paste it in your RTE\'s HTML source view.');
-                } catch (err) {
-                    console.error('Failed to copy:', err);
-                    showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
-                }
-            }
-        };
-
-        function fallbackCopyTextToClipboard(text) {
-            var textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            textArea.style.top = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
+    window.copyMiniRollbackFullHtml = function () {
+        var textarea = document.getElementById('miniRollbackFullHtmlTextarea');
+        if (textarea) {
+            textarea.select();
             try {
-                var successful = document.execCommand('copy');
-                if (successful) {
-                    showMiniRollbackNotification('HTML copied to clipboard! Paste it in your RTE\'s HTML source view.');
-                } else {
-                    showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
-                }
+                document.execCommand('copy');
+                showMiniRollbackNotification('HTML copied to clipboard! Paste it in your RTE\'s HTML source view.');
             } catch (err) {
+                console.error('Failed to copy:', err);
                 showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
             }
+        }
+    };
 
-            document.body.removeChild(textArea);
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                showMiniRollbackNotification('HTML copied to clipboard! Paste it in your RTE\'s HTML source view.');
+            } else {
+                showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
+            }
+        } catch (err) {
+            showMiniRollbackNotification('Copy failed. Please select and copy manually.', true);
         }
 
-        function showMiniRollbackNotification(message, isError = false) {
-            var notification = angular.element(`
+        document.body.removeChild(textArea);
+    }
+
+    function showMiniRollbackNotification(message, isError = false) {
+        var notification = angular.element(`
                 <div class="mini-rollback-notification ${isError ? 'mini-rollback-error' : 'mini-rollback-success'}">
                     <i class="icon ${isError ? 'icon-delete' : 'icon-check'}"></i>
                     <div class="mini-rollback-notification-content">
@@ -943,13 +979,13 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                 </div>
             `);
 
-            angular.element(document.body).append(notification);
+        angular.element(document.body).append(notification);
 
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        // Mark that functions are initialized to prevent re-initialization
-        window.miniRollbackInitialized = true;
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
     }
+
+    // Mark that functions are initialized to prevent re-initialization
+    window.miniRollbackInitialized = true;
+}
