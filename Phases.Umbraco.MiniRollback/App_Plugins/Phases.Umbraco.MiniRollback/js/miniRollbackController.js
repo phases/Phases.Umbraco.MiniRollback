@@ -38,36 +38,6 @@ angular.module("umbraco").config(['$provide', function ($provide) {
         var directive = $delegate[0];
         var linkFn = directive.link;
 
-
-        // ============================================
-        // CONTEXT CHECK: Only show in content nodes
-        // ============================================
-        function isInContentNode() {
-            var currentUrl = window.location.href || window.location.hash;
-
-            // Check if we're in content editing context
-            if (currentUrl.includes('#/content/content/edit/')) {
-                return true;
-            }
-
-            // Exclude DocTypes, DataTypes, and other settings
-            if (currentUrl.includes('#/settings/documentTypes/') ||
-                currentUrl.includes('#/settings/dataTypes/') ||
-                currentUrl.includes('#/settings/') ||
-                currentUrl.includes('#/member/member/edit/') ||
-                currentUrl.includes('#/media/media/edit/')) {
-                return false;
-            }
-
-            // Additional check: look for node ID in URL pattern
-            var nodeIdMatch = currentUrl.match(/#\/content\/content\/edit\/(\d+)/);
-            if (nodeIdMatch && nodeIdMatch[1]) {
-                return true;
-            }
-
-            return false;
-        }
-
         // Text diff function to highlight changes
         function createTextDiff(oldText, newText) {
             if (!oldText || !newText) return escapeHtml(newText || '');
@@ -259,9 +229,11 @@ angular.module("umbraco").config(['$provide', function ($provide) {
             return function (scope, element) {
                 if (scope.model && (scope.model.view === "textbox" || scope.model.view === "textarea" || scope.model.view === "rte")) {
 
-                    if (!isInContentNode()) {
-                        // We're not in a content node, skip icon attachment
-                        return;
+                    // ============================================
+                    // CHECK: Only show in content nodes where scope.node exists
+                    // ============================================
+                    if (!scope.node) {
+                        return; // Skip if not in a content node
                     }
 
                     $http.get("/umbraco/backoffice/lastvalues/MiniRollbackApi/IsEnabled", {
@@ -310,9 +282,26 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                     var loader = angular.element('<div class="mini-rollback-loader">Loading...</div>');
                                     element.append(loader);
 
+                                    // Get current culture from Umbraco's URL
+                                    var culture = null;
+
+                                    // Extract culture from URL (e.g., ?mculture=da)
+                                    var urlMatch = window.location.href.match(/[?&]mculture=([^&]+)/);
+                                    if (urlMatch && urlMatch[1]) {
+                                        culture = urlMatch[1];
+                                    }
+
+                                    // Alternative: Try to get from Angular scope if available
+                                    if (!culture && scope.$parent && scope.$parent.content && scope.$parent.content.language) {
+                                        culture = scope.$parent.content.language.culture;
+                                    }
+
                                     var url = "/umbraco/backoffice/lastvalues/MiniRollbackApi/GetLastValue?nodeId=" + nodeId + "&alias=" + alias;
                                     if (elementKey) {
                                         url += "&elementKey=" + elementKey;
+                                    }
+                                    if (culture) {
+                                        url += "&culture=" + encodeURIComponent(culture);
                                     }
 
                                     $http.get(url, {
