@@ -26,7 +26,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
 
         public bool IsEnabled => _configuration.GetValue<bool>("Phases:MiniRollback:Enabled", true);
 
-        public List<HistoryData> GetVersionHistories(int nodeId, string alias, string elementKey = null)
+        public List<HistoryData> GetVersionHistories(int nodeId, string alias, string elementKey = null, string culture = null)
         {
             var historyData = new List<HistoryData>();
 
@@ -40,11 +40,11 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
 
                 if (versions.Any())
                 {
-                    historyData = ExtractHistoryFromVersions(versions, alias);
+                    historyData = ExtractHistoryFromVersions(versions, alias, culture);
 
                     if (!historyData.Any() && !string.IsNullOrWhiteSpace(elementKey))
                     {
-                        historyData = ExtractElementKeyHistory(versions, alias, elementKey);
+                        historyData = ExtractElementKeyHistory(versions, alias, elementKey, culture);
                     }
                 }
             }
@@ -52,13 +52,26 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
             return historyData;
         }
 
-        private List<HistoryData> ExtractHistoryFromVersions(IEnumerable<IContent> versions, string alias)
+
+        private List<HistoryData> ExtractHistoryFromVersions(IEnumerable<IContent> versions, string alias, string culture = null)
         {
             var historyList = new List<HistoryData>();
 
             foreach (var version in versions)
             {
-                var value = version.GetValue(alias);
+                object value = null;
+
+                // Try to get culture-specific value first if culture is provided
+                if (!string.IsNullOrWhiteSpace(culture))
+                {
+                    value = version.GetValue(alias, culture);
+                }
+
+                // Fallback to invariant culture if no culture-specific value found
+                if (value == null)
+                {
+                    value = version.GetValue(alias);
+                }
 
                 if (value != null)
                 {
@@ -99,7 +112,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
             return stringValue;
         }
 
-        private List<HistoryData> ExtractElementKeyHistory(IEnumerable<IContent> versions, string alias, string elementKey)
+        private List<HistoryData> ExtractElementKeyHistory(IEnumerable<IContent> versions, string alias, string elementKey, string culture = null)
         {
             string normalizedElementKey = "umb://element/" + elementKey.Replace("-", "").ToLower();
             var historyData = new List<HistoryData>();
@@ -115,7 +128,21 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback
 
                 foreach (var property in properties)
                 {
-                    var publishedValue = property["Values"]?.First?["EditedValue"]?.ToString();
+                    // Try to get the value based on culture
+                    string publishedValue = null;
+
+                    if (!string.IsNullOrWhiteSpace(culture))
+                    {
+                        // Try culture-specific value first
+                        var cultureValue = property["Values"]?.FirstOrDefault(v => v["Culture"]?.ToString() == culture);
+                        publishedValue = cultureValue?["EditedValue"]?.ToString();
+                    }
+
+                    // Fallback to invariant culture or first available
+                    if (string.IsNullOrEmpty(publishedValue))
+                    {
+                        publishedValue = property["Values"]?.First?["EditedValue"]?.ToString();
+                    }
 
                     if (string.IsNullOrEmpty(publishedValue)) continue;
 

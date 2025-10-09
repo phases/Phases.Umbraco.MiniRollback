@@ -9,7 +9,7 @@ namespace Phases.Umbraco.MiniRollback.Services.MiniRollback.Interfaces
 {
     public interface IMiniRollbackServices
     {
-        List<HistoryData> GetVersionHistories(int nodeId, string alias, string elementKey = null);
+        List<HistoryData> GetVersionHistories(int nodeId, string alias, string elementKey = null, string culture = null);
 
         bool IsEnabled { get; }
     }

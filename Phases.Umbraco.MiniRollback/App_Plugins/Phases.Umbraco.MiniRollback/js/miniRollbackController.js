@@ -310,9 +310,26 @@ angular.module("umbraco").config(['$provide', function ($provide) {
                                     var loader = angular.element('<div class="mini-rollback-loader">Loading...</div>');
                                     element.append(loader);
 
+                                    // Get current culture from Umbraco's URL
+                                    var culture = null;
+
+                                    // Extract culture from URL (e.g., ?mculture=da)
+                                    var urlMatch = window.location.href.match(/[?&]mculture=([^&]+)/);
+                                    if (urlMatch && urlMatch[1]) {
+                                        culture = urlMatch[1];
+                                    }
+
+                                    // Alternative: Try to get from Angular scope if available
+                                    if (!culture && scope.$parent && scope.$parent.content && scope.$parent.content.language) {
+                                        culture = scope.$parent.content.language.culture;
+                                    }
+
                                     var url = "/umbraco/backoffice/lastvalues/MiniRollbackApi/GetLastValue?nodeId=" + nodeId + "&alias=" + alias;
                                     if (elementKey) {
                                         url += "&elementKey=" + elementKey;
+                                    }
+                                    if (culture) {
+                                        url += "&culture=" + encodeURIComponent(culture);
                                     }
 
                                     $http.get(url, {
