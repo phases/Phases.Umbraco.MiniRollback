@@ -35,9 +35,8 @@ namespace Phases.Umbraco.MiniRollback.Controllers.MiniRollback
             }
         }
 
-        public object GetLastValue(int nodeId, string alias, string elementKey = null)
+        public object GetLastValue(int nodeId, string alias, string elementKey = null, string culture = null)
         {
-
             try
             {
                 if (nodeId <= 0 || string.IsNullOrWhiteSpace(alias))
@@ -45,14 +44,14 @@ namespace Phases.Umbraco.MiniRollback.Controllers.MiniRollback
                     return BadRequest(new { message = "Invalid parameters", values = new List<HistoryData>() });
                 }
 
-                var historyData = _miniRollbackServices.GetVersionHistories(nodeId, alias, elementKey);
+                var historyData = _miniRollbackServices.GetVersionHistories(nodeId, alias, elementKey, culture);
 
                 if (historyData == null || !historyData.Any())
                 {
                     historyData = new List<HistoryData>
-                    {
-                        new HistoryData { Value = "No history found...", Updated = "" }
-                    };
+            {
+                new HistoryData { Value = "No history found...", Updated = "" }
+            };
                 }
 
                 var distinctData = historyData.DistinctBy(x => x.Value).ToList();
@@ -60,17 +59,15 @@ namespace Phases.Umbraco.MiniRollback.Controllers.MiniRollback
             }
             catch (Exception ex)
             {
-               
                 return StatusCode(500, new
                 {
                     message = "Error retrieving version history",
                     values = new List<HistoryData>
-                    {
-                        new HistoryData { Value = "Error loading history. Please try again.", Updated = "" }
-                    }
+            {
+                new HistoryData { Value = "Error loading history. Please try again.", Updated = "" }
+            }
                 });
             }
-
         }
     }
 }
